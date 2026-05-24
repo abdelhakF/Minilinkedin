@@ -1,0 +1,135 @@
+# Prompt Détaillé pour la Génération de Données Fictives (Basé sur schema_complet.sql)
+
+## Rôle et Objectif
+
+Vous êtes un expert en génération de données SQL. Votre mission est de créer un script SQL complet et cohérent pour une base de données PostgreSQL, en vous basant **strictement** sur la structure des tables fournie ci-dessous.
+
+## Tâche Principale
+
+Générez un script SQL contenant des instructions `INSERT` pour peupler toutes les tables pertinentes. Le jeu de données doit être centré autour de la création de **100 utilisateurs uniques** et de leurs activités associées.
+
+## Instructions Générales
+
+1.  **Format de Sortie :** Un unique bloc de code SQL contenant des instructions `INSERT INTO ... VALUES ...;`.
+2.  **Cohérence Stricte :** Toutes les clés étrangères (`*_id`) doivent correspondre à des ID primaires valides dans les tables parentes. L'ordre d'insertion est crucial.
+3.  **Réalisme et Variété :**
+    -   Créez des données plausibles en français.
+    -   Variez l'activité : certains utilisateurs sont très actifs (beaucoup de posts, de likes, de commentaires), d'autres sont passifs.
+    -   Ne remplissez pas toutes les colonnes optionnelles pour chaque enregistrement.
+
+---
+
+## Structure des Tables et Instructions de Génération
+
+### Ordre d'Insertion Suggéré
+1.  `account`, `stats`, `profile`
+2.  `utilisateur`
+3.  `etudiant`, `enseignant`, `administrateur`
+4.  `post` (et ses sous-types `offre_stage`, `sujet_these`, `projet_tuteure`)
+5.  `experience`, `education`, `skill`, `accomplishment` (liés à `profile`)
+6.  `comment`, `post_like`, `post_share`, `candidature`, `connection_invitation`, etc.
+
+### 1. Tables de Base (100 lignes chacune)
+
+-   **`account`**
+    -   `id` (BIGINT) : de 1 à 100.
+    -   `password` (VARCHAR) : Une chaîne de caractères qui ressemble à un hash bcrypt (ex: `$2a$10$....`).
+    -   `status` (VARCHAR) : `ACTIVE` pour la plupart. Mettez 2-3 utilisateurs en `BANNED`.
+    -   `reset_password_token` (VARCHAR) : `NULL` pour tous.
+    -   `account_id` (VARCHAR) : `NULL` pour tous (semble être un champ hérité, non utilisé).
+
+-   **`stats`**
+    -   `id` (BIGINT) : de 1 à 100.
+    -   `total_views`, `total_connections`, `search_appearances` (INTEGER) : Nombres aléatoires plausibles.
+
+-   **`profile`**
+    -   `id` (BIGINT) : de 1 à 100.
+    -   `summary` (VARCHAR) : Une courte biographie (2-3 phrases).
+    -   `headline` (VARCHAR) : Un titre professionnel (ex: "Étudiant en Informatique", "Développeur Full Stack").
+    -   `photo_url` (VARCHAR) : Laissez `NULL`.
+    -   `institution` (VARCHAR) : Nom d'une université ou entreprise.
+    -   `stats_id` (BIGINT) : L'ID du `stats` correspondant (de 1 à 100).
+    -   `utilisateur_id` (BIGINT) : L'ID de l'`utilisateur` correspondant (de 1 à 100).
+
+### 2. Table `utilisateur` (100 lignes)
+
+-   `id` (BIGINT) : de 1 à 100.
+-   `nom` (VARCHAR) : Un nom complet réaliste.
+-   `email` (VARCHAR) : Une adresse email unique.
+-   `phone` (VARCHAR) : Un numéro de téléphone fictif.
+-   `institution` (VARCHAR) : Le même que dans le `profile`.
+-   `role_enum` (VARCHAR) : Répartir **80 `ETUDIANT`**, **15 `ENSEIGNANT`** (dont 5 non validés), **5 `ADMIN`**.
+-   `account_id` (BIGINT) : L'ID du `account` correspondant (de 1 à 100).
+-   `profile_id` (BIGINT) : L'ID du `profile` correspondant (de 1 à 100).
+-   `date_inscription` (TIMESTAMP) : Une date/heure aléatoire sur les 12 derniers mois.
+-   `city`, `country`, `state`, `street_address`, `zipcode` (VARCHAR) : Remplir avec des données françaises.
+
+### 3. Tables Spécialisées (selon la répartition)
+
+-   **`etudiant`** (80 lignes)
+    -   `id` (BIGINT) : L'ID d'un utilisateur avec `role_enum = 'ETUDIANT'`.
+    -   `niveau_etude` (VARCHAR) : ex: "Master 2", "Licence 3".
+
+-   **`enseignant`** (15 lignes)
+    -   `id` (BIGINT) : L'ID d'un utilisateur avec `role_enum = 'ENSEIGNANT'`.
+    -   `specialite` (VARCHAR) : ex: "Génie Logiciel", "Réseaux et Sécurité".
+    -   `est_valide` (BOOLEAN) : `true` pour 10, `false` pour 5.
+    -   `diplome` (VARCHAR) : ex: "Doctorat en Informatique".
+
+-   **`administrateur`** (5 lignes)
+    -   `id` (BIGINT) : L'ID d'un utilisateur avec `role_enum = 'ADMIN'`.
+
+### 4. Tables de Contenu (Générez un volume réaliste)
+
+-   **`post`** (Générez environ 200 publications)
+    -   `id` (BIGINT) : Séquence auto-incrémentée.
+    -   `titre`, `description` (VARCHAR).
+    -   `date_publication` (TIMESTAMP).
+    -   `auteur_id` (BIGINT) : L'ID d'un `utilisateur` aléatoire.
+    -   `type_post` (VARCHAR) : Le nom de la sous-classe (`OffreStage`, `SujetThese`, `ProjetTuteure`).
+    -   `like_count`, `share_count`, `comment_count` (INTEGER) : Initialiser à 0.
+    -   `date_limite`, `image_url` (VARCHAR) : Laisser `NULL` pour la plupart.
+
+-   **`offre_stage`**, **`sujet_these`**, **`projet_tuteure`**
+    -   Remplir les colonnes spécifiques. L'ID doit correspondre à un `id` de la table `post`.
+
+-   **`skill`** (Générez 3 à 10 compétences par `profile`)
+    -   `id` (BIGINT).
+    -   `name` (VARCHAR) : ex: "Java", "Spring Boot", "React".
+    -   `level` (VARCHAR) : `BEGINNER`, `INTERMEDIATE`, `ADVANCED`, ou `EXPERT`.
+    -   `profile_id` (BIGINT) : L'ID d'un `profile` existant.
+
+-   **`experience`** (Générez 1 à 4 expériences pour 70% des `profile`)
+    -   `id` (BIGINT).
+    -   `title`, `company`, `location`, `start_date` (date), `end_date` (date, peut être `NULL`), `description`.
+    -   `profile_id` (BIGINT) : L'ID d'un `profile` existant.
+
+-   **`education`** (Générez 1 à 3 formations pour 90% des `profile`)
+    -   `id` (BIGINT).
+    -   `school`, `degree`, `from_year`, `to_year`, `description`.
+    -   `profile_id` (BIGINT) : L'ID d'un `profile` existant.
+
+-   **`comment`** (Générez environ 400 commentaires)
+    -   `id` (BIGINT).
+    -   `text` (TEXT).
+    -   `created_at` (TIMESTAMP).
+    -   `post_id` (BIGINT) : L'ID d'un `post` existant.
+    -   `user_id` (BIGINT) : L'ID d'un `utilisateur` existant.
+    -   `total_likes` (INTEGER) : Initialiser à 0.
+    -   `notification_id` (BIGINT) : Laisser `NULL`.
+
+-   **`post_like`** (Générez environ 800 likes)
+    -   `id` (BIGINT).
+    -   `post_id` (BIGINT) : L'ID d'un `post` existant.
+    -   `user_id` (BIGINT) : L'ID d'un `utilisateur` existant.
+    -   `liked_at` (TIMESTAMP).
+    -   `notification_id` (BIGINT) : Laisser `NULL`.
+
+-   **`candidature`** (Générez environ 50 candidatures)
+    -   `id` (BIGINT).
+    -   `etudiant_id` (BIGINT) : L'ID d'un `utilisateur` de type `ETUDIANT`.
+    -   `post_id` (BIGINT) : L'ID d'un `post` de type `OffreStage`.
+    -   `date_depot` (DATE).
+    -   `message_motivation` (VARCHAR).
+    -   `statut` (VARCHAR) : `PENDING`.
+    -   `notification_id` (BIGINT) : Laisser `NULL`.

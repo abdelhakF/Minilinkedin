@@ -1,0 +1,229 @@
+=====================================================================
+RECAPITULATIF DES MODIFICATIONS - Fonctionnalites F22 / F23 / F24
+Date : 2026-05-04
+Auteur : abdelhakF
+=====================================================================
+
+OBJECTIF
+--------
+Implementation cote backend des fonctionnalites administrateur :
+  - F22 : Moderation du contenu (signalements)
+  - F23 : Gestion des catalogues (etablissements + domaines)
+  - F24 : Dashboard administrateur etendu (statistiques detaillees)
+
+
+=====================================================================
+F22 - MODERATION DU CONTENU (SIGNALEMENTS)
+=====================================================================
+
+FICHIERS CREES
+--------------
+1. src/main/java/com/minilinkedin/mini_linkedin/model/SignalementStatus.java
+   - Enumeration : PENDING, RESOLVED, REJECTED
+
+2. src/main/java/com/minilinkedin/mini_linkedin/model/Signalement.java
+   - Entite JPA (id, motif, status, createdAt, resolvedAt)
+   - Relations ManyToOne vers Utilisateur (reporter) et Post (post)
+   - @PrePersist : initialise createdAt et status=PENDING
+
+3. src/main/java/com/minilinkedin/mini_linkedin/repository/SignalementRepository.java
+   - findAllByOrderByCreatedAtDesc()
+   - findByStatusOrderByCreatedAtDesc(status)
+   - countByStatus(status)
+   - deleteByPost_Id(postId)
+   - deleteByReporter_Id(reporterId)
+
+4. src/main/java/com/minilinkedin/mini_linkedin/dto/SignalementRequest.java
+   - DTO record (postId, motif)
+
+5. src/main/java/com/minilinkedin/mini_linkedin/service/SignalementService.java
+   - createSignalement(request, reporterEmail)
+   - getAllSignalements()
+   - getSignalementsByStatus(status)
+   - resolveSignalement(id, deletePost)  -> supprime le post si demande
+   - rejectSignalement(id)
+   - deleteSignalement(id)
+
+6. src/main/java/com/minilinkedin/mini_linkedin/controller/SignalementController.java
+   - POST /api/signalements (utilisateur authentifie)
+
+FICHIERS MODIFIES
+-----------------
+7. src/main/java/com/minilinkedin/mini_linkedin/controller/AdminController.java
+   AJOUT des endpoints :
+   - GET    /api/admin/signalements             (filtre optionnel ?status=)
+   - PUT    /api/admin/signalements/{id}/resolve (?deletePost=true|false)
+   - PUT    /api/admin/signalements/{id}/reject
+   - DELETE /api/admin/signalements/{id}
+   AJOUT du champ : private final SignalementService signalementService;
+
+8. src/main/java/com/minilinkedin/mini_linkedin/service/AdminService.java
+   - Injection de SignalementRepository
+   - deleteUser(userId) : nettoie maintenant les signalements
+       * signalementRepository.deleteByReporter_Id(userId)
+       * suppression des signalements lies aux posts de l'utilisateur
+   - deletePost(postId) : nettoie les signalements lies au post avant
+     suppression -> evite les violations de cle etrangere
+
+
+=====================================================================
+F23 - GESTION DES CATALOGUES (ETABLISSEMENTS + DOMAINES)
+=====================================================================
+
+FICHIERS CREES
+--------------
+1. src/main/java/com/minilinkedin/mini_linkedin/model/Etablissement.java
+   - Entite JPA (id, nom UNIQUE, ville, pays, description TEXT)
+
+2. src/main/java/com/minilinkedin/mini_linkedin/model/Domaine.java
+   - Entite JPA (id, nom UNIQUE, description TEXT)
+
+3. src/main/java/com/minilinkedin/mini_linkedin/repository/EtablissementRepository.java
+   - findByNomIgnoreCase
+   - existsByNomIgnoreCase
+   - findAllByOrderByNomAsc
+
+4. src/main/java/com/minilinkedin/mini_linkedin/repository/DomaineRepository.java
+   - findByNomIgnoreCase
+   - existsByNomIgnoreCase
+   - findAllByOrderByNomAsc
+
+5. src/main/java/com/minilinkedin/mini_linkedin/service/CatalogService.java
+   - CRUD complet pour Etablissement et Domaine
+   - Verification d'unicite (DuplicateEntryException si nom existant)
+   - Update partiel (PATCH-like) : seuls les champs non-null sont
+     modifies
+
+6. src/main/java/com/minilinkedin/mini_linkedin/controller/CatalogController.java
+   ENDPOINTS PUBLICS (lecture pour formulaires) :
+   - GET /api/etablissements
+   - GET /api/domaines
+
+   ENDPOINTS ADMIN - ETABLISSEMENTS :
+   - GET    /api/admin/etablissements
+   - GET    /api/admin/etablissements/{id}
+   - POST   /api/admin/etablissements
+   - PUT    /api/admin/etablissements/{id}
+   - DELETE /api/admin/etablissements/{id}
+
+   ENDPOINTS ADMIN - DOMAINES :
+   - GET    /api/admin/domaines
+   - GET    /api/admin/domaines/{id}
+   - POST   /api/admin/domaines
+   - PUT    /api/admin/domaines/{id}
+   - DELETE /api/admin/domaines/{id}
+
+
+=====================================================================
+F24 - DASHBOARD ADMIN ETENDU (STATISTIQUES)
+=====================================================================
+
+FICHIERS MODIFIES
+-----------------
+1. src/main/java/com/minilinkedin/mini_linkedin/dto/DashboardStatsDTO.java
+   AVANT : record(totalUsers, totalPosts, totalTeachers)
+   APRES : record etendu avec :
+     - long totalUsers
+     - long totalPosts
+     - long totalTeachers
+     - long pendingTeachers          (enseignants non encore valides)
+     - long pendingSignalements      (signalements en attente)
+     - long newUsersLast7Days
+     - long postsLast7Days
+     - Map<String, Long> usersByRole (cle = nom du TypeRole)
+     - List<DailyCount> usersTimeSeries (7 derniers jours)
+     - List<DailyCount> postsTimeSeries (7 derniers jours)
+   AJOUT du record interne : DailyCount(String date, long count)
+
+2. src/main/java/com/minilinkedin/mini_linkedin/model/Utilisateur.java
+   AJOUT du champ : private LocalDateTime dateInscription;
+   AJOUT @PrePersist : remplit dateInscription a la creation
+   NOTE : les utilisateurs existants auront NULL et ne seront pas
+   comptes dans newUsersLast7Days (comportement voulu).
+
+3. src/main/java/com/minilinkedin/mini_linkedin/repository/UtilisateurRepository.java
+   AJOUT :
+   - countByDateInscriptionAfter(LocalDateTime since)
+   - countByRoleEnum(TypeRole role)
+   - findRegisteredSince(LocalDateTime since)
+
+4. src/main/java/com/minilinkedin/mini_linkedin/repository/PostRepository.java
+   AJOUT :
+   - countByDatePublicationAfter(LocalDate since)
+   - countByDatePublicationGreaterThanEqual(LocalDate since)
+   - findPublishedSince(LocalDate since)
+
+5. src/main/java/com/minilinkedin/mini_linkedin/service/AdminService.java
+   getDashboardStats() reecrit pour calculer :
+     - totaux (utilisateurs, posts, enseignants)
+     - pendingTeachers   (enseignants non valides)
+     - pendingSignalements (signalements PENDING)
+     - newUsersLast7Days  (depuis maintenant - 7 jours)
+     - postsLast7Days     (depuis aujourd'hui - 6 jours, 7 jours inclus)
+     - usersByRole        (Map ETUDIANT/ENSEIGNANT/ADMIN -> count)
+     - usersTimeSeries    (compte par jour, 7 dernieres entrees)
+     - postsTimeSeries    (compte par jour, 7 dernieres entrees)
+   Methodes privees ajoutees :
+     - buildUserSeries(LocalDateTime since)
+     - buildPostSeries(LocalDate since)
+     - last7DaysSeries(today, byDay)  -> remplit les jours sans donnee
+       avec 0 (zero-fill), garantit toujours 7 entrees ordonnees du
+       plus ancien au plus recent.
+
+
+=====================================================================
+RESUME DES NOUVEAUX ENDPOINTS
+=====================================================================
+
+UTILISATEUR (authentifie) :
+  POST   /api/signalements                              - signaler un post
+
+ADMIN :
+  GET    /api/admin/signalements?status=PENDING         - liste signalements
+  PUT    /api/admin/signalements/{id}/resolve?deletePost=true
+  PUT    /api/admin/signalements/{id}/reject
+  DELETE /api/admin/signalements/{id}
+
+  GET    /api/admin/etablissements                      - liste
+  GET    /api/admin/etablissements/{id}                 - detail
+  POST   /api/admin/etablissements                      - creer
+  PUT    /api/admin/etablissements/{id}                 - mettre a jour
+  DELETE /api/admin/etablissements/{id}                 - supprimer
+
+  GET    /api/admin/domaines                            - liste
+  GET    /api/admin/domaines/{id}                       - detail
+  POST   /api/admin/domaines                            - creer
+  PUT    /api/admin/domaines/{id}                       - mettre a jour
+  DELETE /api/admin/domaines/{id}                       - supprimer
+
+  GET    /api/admin/stats                               - dashboard etendu
+
+PUBLIC (lecture seule pour formulaires) :
+  GET    /api/etablissements
+  GET    /api/domaines
+
+
+=====================================================================
+NOTES TECHNIQUES
+=====================================================================
+
+- spring.jpa.hibernate.ddl-auto=update : Hibernate va creer
+  automatiquement les nouvelles tables (signalement, etablissement,
+  domaine) et la nouvelle colonne (utilisateur.date_inscription).
+  Aucune migration SQL manuelle n'est requise.
+
+- Les utilisateurs deja en base auront date_inscription=NULL : ils ne
+  seront donc pas comptabilises dans newUsersLast7Days ni dans la
+  serie temporelle. Pour les "rattraper", on peut executer une fois :
+      UPDATE utilisateur SET date_inscription = NOW()
+      WHERE date_inscription IS NULL;
+
+- Le nettoyage des FK lors de la suppression d'un user/post a ete
+  etendu pour inclure les signalements (sinon violations de FK).
+
+- Build verifie : ./mvnw clean compile -DskipTests => BUILD SUCCESS
+  (99 fichiers source).
+
+=====================================================================
+FIN DU DOCUMENT
+=====================================================================

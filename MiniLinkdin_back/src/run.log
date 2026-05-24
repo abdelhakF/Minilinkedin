@@ -1,0 +1,499 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------------< com.minilinkedin:mini-linkedin >-------------------
+[INFO] Building mini-linkedin 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot:3.5.13:run (default-cli) > test-compile @ mini-linkedin >>>
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ mini-linkedin ---
+[INFO] Copying 1 resource from main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ mini-linkedin ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 73 source files with javac [debug parameters release 17] to target\classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ mini-linkedin ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ mini-linkedin ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] <<< spring-boot:3.5.13:run (default-cli) < test-compile @ mini-linkedin <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot:3.5.13:run (default-cli) @ mini-linkedin ---
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.5.13)
+
+2026-04-14T17:09:37.481+01:00  INFO 14132 --- [mini-linkedin] [           main] c.m.m.MiniLinkedinApplication            : Starting MiniLinkedinApplication using Java 23.0.1 with PID 14132 (C:\Users\AdMin\Downloads\src\target\classes started by AdMin in C:\Users\AdMin\Downloads\src)
+2026-04-14T17:09:37.488+01:00  INFO 14132 --- [mini-linkedin] [           main] c.m.m.MiniLinkedinApplication            : No active profile set, falling back to 1 default profile: "default"
+2026-04-14T17:09:40.758+01:00  INFO 14132 --- [mini-linkedin] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-14T17:09:41.014+01:00  INFO 14132 --- [mini-linkedin] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 238 ms. Found 19 JPA repository interfaces.
+2026-04-14T17:09:42.145+01:00  INFO 14132 --- [mini-linkedin] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-04-14T17:09:42.179+01:00  INFO 14132 --- [mini-linkedin] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-04-14T17:09:42.180+01:00  INFO 14132 --- [mini-linkedin] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.53]
+2026-04-14T17:09:42.290+01:00  INFO 14132 --- [mini-linkedin] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-04-14T17:09:42.292+01:00  INFO 14132 --- [mini-linkedin] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4625 ms
+2026-04-14T17:09:42.811+01:00  INFO 14132 --- [mini-linkedin] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-04-14T17:09:43.036+01:00  INFO 14132 --- [mini-linkedin] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.45.Final
+2026-04-14T17:09:43.107+01:00  INFO 14132 --- [mini-linkedin] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-04-14T17:09:44.077+01:00  INFO 14132 --- [mini-linkedin] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-14T17:09:44.154+01:00  INFO 14132 --- [mini-linkedin] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-04-14T17:09:44.671+01:00  INFO 14132 --- [mini-linkedin] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@39e3ea78
+2026-04-14T17:09:44.676+01:00  INFO 14132 --- [mini-linkedin] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-04-14T17:09:44.775+01:00  WARN 14132 --- [mini-linkedin] [           main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-14T17:09:44.834+01:00  INFO 14132 --- [mini-linkedin] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 18.3
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-14T17:09:48.813+01:00  INFO 14132 --- [mini-linkedin] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Hibernate: 
+    create table accomplishment (
+        id bigint generated by default as identity,
+        date varchar(255),
+        description varchar(255),
+        title varchar(255) not null,
+        profile_id bigint,
+        primary key (id)
+    )
+Hibernate: 
+    create table account (
+        id bigint generated by default as identity,
+        account_id varchar(255),
+        password varchar(255),
+        reset_password_token varchar(255),
+        status varchar(255) check (status in ('ACTIVE','CLOSED','CANCELED','BLACKLISTED','BANNED')),
+        primary key (id)
+    )
+Hibernate: 
+    create table administrateur (
+        id integer not null,
+        primary key (id)
+    )
+Hibernate: 
+    create table candidature (
+        id bigint generated by default as identity,
+        date_depot timestamp(6),
+        message_motivation varchar(2000),
+        etudiant_id integer not null,
+        post_id bigint not null,
+        primary key (id)
+    )
+Hibernate: 
+    create table comment (
+        id bigint generated by default as identity,
+        created_at timestamp(6) not null,
+        text oid,
+        total_likes integer not null,
+        notification_id bigint,
+        post_id bigint not null,
+        user_id integer not null,
+        primary key (id)
+    )
+Hibernate: 
+    create table connection_invitation (
+        id bigint generated by default as identity,
+        date_created timestamp(6),
+        sent_to integer not null,
+        status varchar(255) check (status in ('PENDING','ACCEPTED','REJECTED','CANCELED')),
+        sender_id integer,
+        primary key (id)
+    )
+Hibernate: 
+    create table education (
+        id bigint generated by default as identity,
+        degree varchar(255),
+        description varchar(255),
+        from_year varchar(255) not null,
+        school varchar(255) not null,
+        to_year varchar(255),
+        profile_id bigint,
+        primary key (id)
+    )
+Hibernate: 
+    create table enseignant (
+        est_valide boolean,
+        specialite varchar(255),
+        id integer not null,
+        primary key (id)
+    )
+Hibernate: 
+    create table etudiant (
+        niveau_etude varchar(255),
+        id integer not null,
+        primary key (id)
+    )
+Hibernate: 
+    create table etudiant_diplomes (
+        etudiant_id integer not null,
+        diplomes_id bigint not null
+    )
+Hibernate: 
+    create table etudiant_experiences (
+        etudiant_id integer not null,
+        experiences_id bigint not null
+    )
+Hibernate: 
+    create table experience (
+        id bigint generated by default as identity,
+        company varchar(255) not null,
+        description varchar(255),
+        start_date date not null,
+        location varchar(255),
+        title varchar(255) not null,
+        end_date date,
+        profile_id bigint,
+        primary key (id)
+    )
+Hibernate: 
+    create table message (
+        id bigint generated by default as identity,
+        media integer not null,
+        message_body oid,
+        send_to integer not null,
+        sent_at timestamp(6) not null,
+        sender_id integer,
+        primary key (id)
+    )
+Hibernate: 
+    create table notification (
+        notification_id bigint generated by default as identity,
+        content varchar(255),
+        created_on date,
+        is_read boolean not null,
+        related_id bigint,
+        type varchar(255) check (type in ('MESSAGE','CONNECTION','RECOMMENDATION','COMMENT','VISITE')),
+        recipient_id integer not null,
+        message_id bigint,
+        primary key (notification_id)
+    )
+Hibernate: 
+    create table offre_stage (
+        duree varchar(255),
+        lieu varchar(255),
+        remuneration varchar(255),
+        id bigint not null,
+        primary key (id)
+    )
+Hibernate: 
+    create table post (
+        id bigint generated by default as identity,
+        date_limite date,
+        date_publication timestamp(6),
+        description varchar(2000),
+        titre varchar(255),
+        auteur_id integer not null,
+        primary key (id)
+    )
+Hibernate: 
+    create table profile (
+        id bigint generated by default as identity,
+        headline varchar(500),
+        institution varchar(300),
+        photo_url varchar(500),
+        summary varchar(2000),
+        stats_id bigint,
+        utilisateur_id integer,
+        primary key (id)
+    )
+Hibernate: 
+    create table projet_tuteure (
+        module varchar(255),
+        nbr_etudiants_max integer,
+        promotion varchar(255),
+        id bigint not null,
+        primary key (id)
+    )
+Hibernate: 
+    create table recommendation (
+        id bigint generated by default as identity,
+        created_on timestamp(6) not null,
+        description varchar(1000),
+        recommender_email varchar(255) not null,
+        recommender_name varchar(150) not null,
+        status varchar(255) not null check (status in ('PENDING','ACCEPTED','REJECTED')),
+        notification_id bigint,
+        profile_id bigint not null,
+        primary key (id)
+    )
+Hibernate: 
+    create table skill (
+        id bigint generated by default as identity,
+        level varchar(255) not null check (level in ('BEGINNER','INTERMEDIATE','ADVANCED','EXPERT')),
+        name varchar(255) not null,
+        profile_id bigint,
+        primary key (id)
+    )
+Hibernate: 
+    create table stats (
+        id bigint generated by default as identity,
+        search_appearances integer not null,
+        total_connections integer not null,
+        total_views integer not null,
+        primary key (id)
+    )
+Hibernate: 
+    create table sujet_these (
+        directeur varchar(255),
+        laboratoire varchar(255),
+        niveau varchar(255),
+        id bigint not null,
+        primary key (id)
+    )
+Hibernate: 
+    create table utilisateur (
+        id integer generated by default as identity,
+        city varchar(255),
+        country varchar(255),
+        state varchar(255),
+        street_address varchar(255),
+        zipcode varchar(255),
+        email varchar(255),
+        institution varchar(255),
+        nom varchar(255),
+        phone varchar(255),
+        photo varchar(255),
+        role_enum varchar(255) check (role_enum in ('ETUDIANT','ENSEIGNANT','ADMIN')),
+        account_id bigint,
+        profile_id bigint,
+        primary key (id)
+    )
+Hibernate: 
+    alter table if exists comment 
+       drop constraint if exists UKg29gmeybfeo3dgabuxt1py4ts
+2026-04-14T17:09:49.437+01:00  WARN 14132 --- [mini-linkedin] [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2026-04-14T17:09:49.438+01:00  WARN 14132 --- [mini-linkedin] [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : la contrainte « ukg29gmeybfeo3dgabuxt1py4ts » de la relation « comment » n'existe pas, ignore
+Hibernate: 
+    alter table if exists comment 
+       add constraint UKg29gmeybfeo3dgabuxt1py4ts unique (notification_id)
+Hibernate: 
+    alter table if exists etudiant_diplomes 
+       drop constraint if exists UKn41647p2lr6ikgcyxqe61fscv
+2026-04-14T17:09:49.445+01:00  WARN 14132 --- [mini-linkedin] [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2026-04-14T17:09:49.446+01:00  WARN 14132 --- [mini-linkedin] [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : la contrainte « ukn41647p2lr6ikgcyxqe61fscv » de la relation « etudiant_diplomes » n'existe pas, ignore
+Hibernate: 
+    alter table if exists etudiant_diplomes 
+       add constraint UKn41647p2lr6ikgcyxqe61fscv unique (diplomes_id)
+Hibernate: 
+    alter table if exists etudiant_experiences 
+       drop constraint if exists UKj8wk9xw756ftnm2fu3rk1ioeu
+2026-04-14T17:09:49.451+01:00  WARN 14132 --- [mini-linkedin] [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2026-04-14T17:09:49.452+01:00  WARN 14132 --- [mini-linkedin] [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : la contrainte « ukj8wk9xw756ftnm2fu3rk1ioeu » de la relation « etudiant_experiences » n'existe pas, ignore
+Hibernate: 
+    alter table if exists etudiant_experiences 
+       add constraint UKj8wk9xw756ftnm2fu3rk1ioeu unique (experiences_id)
+Hibernate: 
+    alter table if exists profile 
+       drop constraint if exists UKremsx9y04nxmqelkmyfjsiqfo
+2026-04-14T17:09:49.461+01:00  WARN 14132 --- [mini-linkedin] [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2026-04-14T17:09:49.462+01:00  WARN 14132 --- [mini-linkedin] [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : la contrainte « ukremsx9y04nxmqelkmyfjsiqfo » de la relation « profile » n'existe pas, ignore
+Hibernate: 
+    alter table if exists profile 
+       add constraint UKremsx9y04nxmqelkmyfjsiqfo unique (stats_id)
+Hibernate: 
+    alter table if exists profile 
+       drop constraint if exists UKfae09cc022886v0nc1cv79juy
+2026-04-14T17:09:49.468+01:00  WARN 14132 --- [mini-linkedin] [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2026-04-14T17:09:49.468+01:00  WARN 14132 --- [mini-linkedin] [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : la contrainte « ukfae09cc022886v0nc1cv79juy » de la relation « profile » n'existe pas, ignore
+Hibernate: 
+    alter table if exists profile 
+       add constraint UKfae09cc022886v0nc1cv79juy unique (utilisateur_id)
+Hibernate: 
+    alter table if exists recommendation 
+       drop constraint if exists UKp5dsqc7h7bwv9ky3pson37vvs
+2026-04-14T17:09:49.475+01:00  WARN 14132 --- [mini-linkedin] [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2026-04-14T17:09:49.476+01:00  WARN 14132 --- [mini-linkedin] [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : la contrainte « ukp5dsqc7h7bwv9ky3pson37vvs » de la relation « recommendation » n'existe pas, ignore
+Hibernate: 
+    alter table if exists recommendation 
+       add constraint UKp5dsqc7h7bwv9ky3pson37vvs unique (notification_id)
+Hibernate: 
+    alter table if exists utilisateur 
+       drop constraint if exists UKi0r4o84dmka5s4gna8tu3ovbj
+2026-04-14T17:09:49.485+01:00  WARN 14132 --- [mini-linkedin] [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2026-04-14T17:09:49.486+01:00  WARN 14132 --- [mini-linkedin] [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : la contrainte « uki0r4o84dmka5s4gna8tu3ovbj » de la relation « utilisateur » n'existe pas, ignore
+Hibernate: 
+    alter table if exists utilisateur 
+       add constraint UKi0r4o84dmka5s4gna8tu3ovbj unique (account_id)
+Hibernate: 
+    alter table if exists utilisateur 
+       drop constraint if exists UK95amehegokco3lxku1udjbu6n
+2026-04-14T17:09:49.495+01:00  WARN 14132 --- [mini-linkedin] [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2026-04-14T17:09:49.495+01:00  WARN 14132 --- [mini-linkedin] [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : la contrainte « uk95amehegokco3lxku1udjbu6n » de la relation « utilisateur » n'existe pas, ignore
+Hibernate: 
+    alter table if exists utilisateur 
+       add constraint UK95amehegokco3lxku1udjbu6n unique (profile_id)
+Hibernate: 
+    alter table if exists accomplishment 
+       add constraint FKexxmae78fj8ec4jitjykl1kag 
+       foreign key (profile_id) 
+       references profile
+Hibernate: 
+    alter table if exists administrateur 
+       add constraint FKawt6kv01mreprfwbksw65mm8y 
+       foreign key (id) 
+       references utilisateur
+Hibernate: 
+    alter table if exists candidature 
+       add constraint FK10ncm6vkow64cljoui4qc1woh 
+       foreign key (etudiant_id) 
+       references etudiant
+Hibernate: 
+    alter table if exists candidature 
+       add constraint FKhviv9nr2cqhffastd5ito8pns 
+       foreign key (post_id) 
+       references post
+Hibernate: 
+    alter table if exists comment 
+       add constraint FKlk4o90b8dpywn0h666n5er8hs 
+       foreign key (notification_id) 
+       references notification
+Hibernate: 
+    alter table if exists comment 
+       add constraint FKs1slvnkuemjsq2kj4h3vhx7i1 
+       foreign key (post_id) 
+       references post
+Hibernate: 
+    alter table if exists comment 
+       add constraint FKdx857m0i0yoqs6ckirbge1wb 
+       foreign key (user_id) 
+       references utilisateur
+Hibernate: 
+    alter table if exists connection_invitation 
+       add constraint FK80ru877uy6wxdq6bm3eokswqb 
+       foreign key (sender_id) 
+       references utilisateur
+Hibernate: 
+    alter table if exists education 
+       add constraint FKelocxwwcyf5acj85hgke1c0fl 
+       foreign key (profile_id) 
+       references profile
+Hibernate: 
+    alter table if exists enseignant 
+       add constraint FKn343u37klb2v11lc87flh0dns 
+       foreign key (id) 
+       references utilisateur
+Hibernate: 
+    alter table if exists etudiant 
+       add constraint FK8r3ygi23xihnm6jbtxoyrmlrj 
+       foreign key (id) 
+       references utilisateur
+Hibernate: 
+    alter table if exists etudiant_diplomes 
+       add constraint FKomxtt0v5cwlk9nss75l9y0amo 
+       foreign key (diplomes_id) 
+       references education
+Hibernate: 
+    alter table if exists etudiant_diplomes 
+       add constraint FKbvc284qql8gy6nctfhhygktyy 
+       foreign key (etudiant_id) 
+       references etudiant
+Hibernate: 
+    alter table if exists etudiant_experiences 
+       add constraint FK86ctgrfuldn349n4aqdl25t6r 
+       foreign key (experiences_id) 
+       references experience
+Hibernate: 
+    alter table if exists etudiant_experiences 
+       add constraint FK7owg2o4g3c8pl8wxgvjk4yv31 
+       foreign key (etudiant_id) 
+       references etudiant
+Hibernate: 
+    alter table if exists experience 
+       add constraint FKhlkosu9yvtv1ptp01x4tfh9ut 
+       foreign key (profile_id) 
+       references profile
+Hibernate: 
+    alter table if exists message 
+       add constraint FK7tqtl1mrpy9w5j03x17kx8rcp 
+       foreign key (sender_id) 
+       references utilisateur
+Hibernate: 
+    alter table if exists notification 
+       add constraint FKh8pxn32mbykfsu2klexa7x4qw 
+       foreign key (recipient_id) 
+       references utilisateur
+Hibernate: 
+    alter table if exists notification 
+       add constraint FKhvo3fdxi7tqeukw9gg2q8rlse 
+       foreign key (message_id) 
+       references message
+Hibernate: 
+    alter table if exists offre_stage 
+       add constraint FKkigr7s01uft1lc8kt07gn4iui 
+       foreign key (id) 
+       references post
+Hibernate: 
+    alter table if exists post 
+       add constraint FKj182s2l6v1djr280qgvcrnebx 
+       foreign key (auteur_id) 
+       references utilisateur
+Hibernate: 
+    alter table if exists profile 
+       add constraint FKd1sccrbb7uwx6bkonbcgmu1i3 
+       foreign key (stats_id) 
+       references stats
+Hibernate: 
+    alter table if exists profile 
+       add constraint FKmcl5r71849b3eaoi552p4r0xc 
+       foreign key (utilisateur_id) 
+       references utilisateur
+Hibernate: 
+    alter table if exists projet_tuteure 
+       add constraint FKjvnbk82vw4bt2mus062ntribv 
+       foreign key (id) 
+       references post
+Hibernate: 
+    alter table if exists recommendation 
+       add constraint FK2y2gwyg16co6sepqf72jv3f7o 
+       foreign key (notification_id) 
+       references notification
+Hibernate: 
+    alter table if exists recommendation 
+       add constraint FK25j45pn596bdnl4dvmf6p3j9j 
+       foreign key (profile_id) 
+       references profile
+Hibernate: 
+    alter table if exists skill 
+       add constraint FKcaom78e5t3e2xd5qmvb2ix8xm 
+       foreign key (profile_id) 
+       references profile
+Hibernate: 
+    alter table if exists sujet_these 
+       add constraint FKfaooi87jiflruutkv754313v4 
+       foreign key (id) 
+       references post
+Hibernate: 
+    alter table if exists utilisateur 
+       add constraint FKlaic77iqv7dpuet7n5oxmks6j 
+       foreign key (account_id) 
+       references account
+Hibernate: 
+    alter table if exists utilisateur 
+       add constraint FK3at7367hsfq1i7ytn2b6sgt67 
+       foreign key (profile_id) 
+       references profile
+2026-04-14T17:09:49.649+01:00  INFO 14132 --- [mini-linkedin] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-14T17:09:50.732+01:00  INFO 14132 --- [mini-linkedin] [           main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-14T17:09:56.014+01:00  WARN 14132 --- [mini-linkedin] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-14T17:09:56.154+01:00  INFO 14132 --- [mini-linkedin] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name userService
+2026-04-14T17:09:59.486+01:00  INFO 14132 --- [mini-linkedin] [           main] o.s.v.b.OptionalValidatorFactoryBean     : Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+2026-04-14T17:10:01.565+01:00  INFO 14132 --- [mini-linkedin] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-04-14T17:10:01.619+01:00  INFO 14132 --- [mini-linkedin] [           main] c.m.m.MiniLinkedinApplication            : Started MiniLinkedinApplication in 25.181 seconds (process running for 26.454)
+2026-04-14T17:10:29.420+01:00  INFO 14132 --- [mini-linkedin] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-14T17:10:29.420+01:00  INFO 14132 --- [mini-linkedin] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-04-14T17:10:29.424+01:00  INFO 14132 --- [mini-linkedin] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2026-04-14T17:10:34.863+01:00  INFO 14132 --- [mini-linkedin] [nio-8080-exec-1] o.springdoc.api.AbstractOpenApiResource  : Init duration for springdoc-openapi is: 5261 ms

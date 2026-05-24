@@ -1,0 +1,101 @@
+@token_etudiant=eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJST0xFX0VUVURJQU5UIl0sInN1YiI6ImplYW4uZXR1ZGlhbnRAdGVzdC5jb20iLCJpYXQiOjE3NzY4ODI0NjQsImV4cCI6MTc3Njk2ODg2NH0.YwdlUUXobqVc2_ZgQSz-KexVBc3pXsopA7EtzDpsS_tjv27LdWwtno9yT2g-SL6QDMyFaVmbujkdOWaRNtTveQ
+@token_enseignant=eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJST0xFX0VOU0VJR05BTlQiXSwic3ViIjoiYWhtZWQuZW5zZWlnbmFudEB0ZXN0LmNvbSIsImlhdCI6MTc3Njg4NzcwMywiZXhwIjoxNzc2OTc0MTAzfQ.QvTWgcI7iquIbELF-DjVQ_cP5JfnpnaBYK0zcF-voVa3UHZcTuOksaAeQJpJ7iWFQiJWMxmIEOtuaBlhykdO6Q
+@token_admin=eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInN1YiI6ImFkbWluQG1pbmlsaW5rZWRpbi5jb20iLCJpYXQiOjE3NzY4ODgxMjYsImV4cCI6MTc3Njk3NDUyNn0.s2cHo1uN87s9hEP1vo9srRFcVpdHIDu_NYNb5Har__Rgxl5J0zKHHWZYcHaLvoFjvf_lZ4_B1mrvEYJx9FXMNg
+GET http://localhost:8084/api/etudiant
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### se decconnecter
+POST http://localhost:8084/api/auth/logout
+
+### se connecter en tant qu'admin
+POST http://localhost:8084/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@minilinkedin.com",
+  "password": "Admin123!"
+}
+
+
+### se connecter en tant qu'enseignant
+POST http://localhost:8084/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "ahmed.enseignant@test.com",
+  "password": "Enseignant123!"
+}
+### create post
+POST http://localhost:8084/api/posts/projet-tutore
+Content-Type: application/json
+Authorization: Bearer {{token_enseignant}}
+
+{
+  "titre": "Projet tutoré IoT",
+  "description": "Développement d'un capteur connecté",
+  "datePublication": "2026-04-22",
+  "dateLimite": "2026-06-01",
+  "module": "IoT",
+  "promotion": "Licence 3",
+  "candidatures": [],
+  "comments": [],
+  "likeCount": 0,
+  "shareCount": 0
+}
+###reponse
+#{
+#  "id": 1,
+#  "titre": "Projet tutoré IoT",
+#  "description": "Développement d'un capteur connecté",
+#  "datePublication": "2026-04-22",
+#  "dateLimite": "2026-06-01",
+#  "auteur": {
+#    "type": "ENSEIGNANT",
+#    "id": 2,
+#    "nom": "Dr. Ahmed Benali",
+#    "address": {
+#      "streetAddress": "Résidence Universitaire",
+#      "city": "Marrakech",
+#      "state": "Marrakesh-Safi",
+#      "zipcode": "40000",
+#      "country": "Maroc"
+#    },
+#    "email": "ahmed.enseignant@test.com",
+#    "phone": "+212661234567",
+#    "institution": "Université Cadi Ayyad",
+#    "photo": "https://example.com/photos/ahmed.jpg",
+#    "roleEnum": "ENSEIGNANT",
+#    "account": {
+#      "id": 2,
+#      "accountId": "ahmed_ens",
+#      "password": "$2a$10$AD8P1K8.MessQ2o6gEIhXeUHxlFPFexbd37FOE2e8tOHaEvgLXl1S",
+#      "resetPasswordToken": null,
+#      "status": "ACTIVE"
+#    },
+#    "specialite": "Intelligence Artificielle et Machine Learning",
+#    "estValide": false
+#  },
+#  "candidatures": [],
+#  "comments": [],
+#  "likeCount": 0,
+#  "shareCount": 0,
+#  "module": "IoT",
+#  "promotion": "Licence 3"
+#}
+
+POST http://localhost:8084/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@minilinkedin.com",
+  "password": "Admin123!"
+}
+
+###delete post
+DELETE http://localhost:8084/api/admin/posts/1
+Content-Type: application/json
+Authorization: Bearer {{token_admin}}
+
+
+
