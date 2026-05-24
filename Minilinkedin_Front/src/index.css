@@ -1,0 +1,10 @@
+:root {
+  /* Le bleu iconique */
+  --li-brand-color: #0A66C2;
+  
+  /* Les gris pour la hiérarchie visuelle */
+  --li-bg-color: #F3F2EF;          /* Fond de page */
+  --li-card-bg: #FFFFFF;          /* Fond des posts */
+  --li-text-main: rgba(0,0,0,0.9); /* Texte principal */
+  --li-text-sub: rgba(0,0,0,0.6);  /* Texte secondaire (ex: date du post) */
+}

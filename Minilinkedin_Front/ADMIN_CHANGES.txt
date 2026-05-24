@@ -1,0 +1,232 @@
+================================================================================
+JOURNAL DES CHANGEMENTS — IMPLÉMENTATION ESPACE ADMINISTRATEUR
+Projet : Minilinkedin_Front
+================================================================================
+
+Objectif :
+Implémenter l'espace administrateur (Module 2 du Swagger) couvrant les
+fonctionnalités F20 à F24 :
+  F20 — Modération des comptes (bannir / débannir / supprimer)
+  F21 — Validation des comptes Enseignants
+  F22 — Modération du contenu (signalements + suppression de posts)
+  F23 — Gestion des catalogues (établissements + domaines)
+  F24 — Statistiques (Dashboard Admin)
+
+
+================================================================================
+1. NOUVEAUX FICHIERS
+================================================================================
+
+src/services/adminService.js
+  Service axios centralisant tous les appels REST de l'espace admin.
+  Méthodes :
+    - getDashboardStats()
+    - getAllUsers / getUserById / deleteUser / banUser / unbanUser
+    - validateEnseignant
+    - getAllPosts / deletePost
+    - getSignalements(status) / resolveSignalement(id, deletePost)
+      / rejectSignalement / deleteSignalement
+    - getEtablissements / createEtablissement / updateEtablissement
+      / deleteEtablissement
+    - getDomaines / createDomaine / updateDomaine / deleteDomaine
+  Tous les appels portent l'en-tête Authorization: Bearer <token>.
+
+src/context/AdminContext.jsx
+  Provider React centralisant l'état de l'espace admin (stats, users, posts,
+  signalements, etablissements, domaines, loading, error) et exposant les
+  actions CRUD via useCallback.
+
+src/hooks/useAdmin.js
+  Hook d'accès au contexte AdminContext (avec garde
+  "must be used within an AdminProvider").
+
+src/components/Admin/AdminRoute.jsx
+  Route guard : redirige vers /login si non authentifié,
+  vers /dashboard si l'utilisateur n'est pas ADMIN.
+
+src/components/Admin/AdminLayout.jsx
+  Layout commun à toutes les pages admin :
+    - Sidebar fixe à gauche (Dashboard, Utilisateurs, Posts,
+      Signalements, Catalogues)
+    - Bouton de déconnexion en bas
+    - Conteneur en position: fixed; inset: 0 pour occuper toute la
+      fenêtre indépendamment du wrapper .app
+
+src/components/Admin/AdminDashboard.jsx
+  Page /admin — tableau de bord :
+    - 4 cartes synthétiques :
+        Utilisateurs total (+ nouveaux 7 j)
+        Enseignants (+ en attente de validation)
+        Posts (+ nouveaux 7 j)
+        Signalements en attente
+    - Panneau "Répartition par rôle" (barres horizontales)
+    - Sparkline SVG inscriptions 7 derniers jours
+    - Sparkline SVG publications 7 derniers jours
+
+src/components/Admin/UsersManagement.jsx
+  Page /admin/users :
+    - Tableau filtrable par rôle (ETUDIANT / ENSEIGNANT / ADMIN / ALL)
+      et par texte (nom / email / institution)
+    - Badge "À valider" sur les enseignants non validés
+    - Indicateur Actif / Banni
+    - Actions par ligne : Voir (modale détails), Valider (enseignants
+      non validés), Bannir / Débannir, Supprimer
+    - Modale d'affichage des détails utilisateur (ID, nom, email,
+      téléphone, rôle, institution, spécialité/diplôme/validé pour
+      enseignants, niveau d'étude pour étudiants)
+
+src/components/Admin/PostsManagement.jsx
+  Page /admin/posts :
+    - Grille de cartes avec titre, image, auteur, dates, description
+      tronquée, compteurs (likes, partages, candidatures)
+    - Recherche par titre / description / auteur
+    - Suppression d'un post avec confirmation
+
+src/components/Admin/SignalementsManagement.jsx
+  Page /admin/signalements :
+    - Filtre par statut (PENDING / RESOLVED / REJECTED / ALL)
+    - Liste des signalements avec :
+        badge de statut, ID, dates, reporter, motif (cité)
+        aperçu du post associé (titre, début de description, auteur)
+    - Actions sur signalement PENDING :
+        Résoudre (garder le post)
+        Résoudre + supprimer le post (deletePost=true)
+        Rejeter
+    - Action Supprimer disponible quel que soit le statut
+
+src/components/Admin/CatalogueManagement.jsx
+  Page /admin/catalogues :
+    - 2 onglets : Établissements / Domaines
+    - Pour chaque entité : recherche, ajout, modification (modale),
+      suppression
+    - Établissement : nom, ville, pays, description
+    - Domaine : nom, description
+
+
+================================================================================
+2. FICHIERS MODIFIÉS
+================================================================================
+
+src/App.jsx
+  - Import de AdminProvider, AdminRoute et des 5 pages admin
+  - Ajout du AdminProvider dans la pile de Providers
+  - Ajout de 5 routes protégées par <AdminRoute> :
+      /admin
+      /admin/users
+      /admin/posts
+      /admin/signalements
+      /admin/catalogues
+
+src/components/Common/Navbar.jsx
+  - Ajout d'un lien "🛠️ Admin" pointant vers /admin, affiché
+    uniquement si user.role === 'ADMIN' (couleur violette pour
+    le distinguer)
+
+src/components/AuthController/Login.jsx
+  - Redirection après login adaptée au rôle :
+      ADMIN → /admin
+      autre → /profile
+  - Helper resolveRedirect : si le rôle reste indéterminé après
+    décodage du JWT, appel test à GET /api/admin/stats — un 200
+    confirme un compte ADMIN (et stocke userRole=ADMIN dans
+    localStorage), sinon redirection vers /profile
+  - Logique appliquée à la fois au useEffect (déjà connecté) et
+    au handleSubmit (nouvelle connexion)
+
+src/services/authService.js
+  - Réécriture de l'extracteur de rôle JWT (extractRoleFromDecoded) :
+      gère role / roleEnum (string)
+      gère roles / authorities / scopes (arrays de strings ou objets
+        { authority | role | name })
+      gère scope (string séparée par espaces)
+      retire automatiquement le préfixe "ROLE_"
+      met en majuscules
+  - console.debug du payload JWT au premier décodage (aide au
+    diagnostic en cas de rôle non détecté)
+
+src/services/postService.js
+  - Ajout de reportPost(postId, motif) → POST /api/signalements
+
+src/context/PostContext.jsx
+  - Ajout de l'action reportPost(postId, motif) exposée via le contexte
+
+src/components/AuthController/Dashboard.jsx
+  - Récupération de reportPost depuis usePost
+  - Handler handleReport (window.prompt pour saisir le motif)
+  - Bouton "🚩 Signaler" affiché sur les posts dont l'utilisateur
+    n'est pas l'auteur
+
+
+================================================================================
+3. CORRECTIONS / AJUSTEMENTS
+================================================================================
+
+AdminLayout — affichage en mode "téléphone" :
+  Cause : la classe globale .app dans App.css applique
+  display: flex; justify-content: center; align-items: center;
+  padding: 24px; ce qui contraignait l'admin layout au centre.
+  Correction : container en position: fixed; inset: 0; zIndex: 10
+  pour couvrir toute la fenêtre.
+  Sidebar : flexShrink: 0 pour conserver sa largeur fixe.
+  Contenu : overflowX: hidden + minWidth: 0 pour empêcher un
+  tableau large de pousser hors de la fenêtre.
+
+AdminLayout — suppression du lien "↩️ Retour app" dans la sidebar.
+
+
+================================================================================
+4. CARTOGRAPHIE F20–F24 / IMPLÉMENTATION
+================================================================================
+
+F20 — Modération comptes
+  UsersManagement : Bannir, Débannir, Supprimer
+  Endpoints : PUT /api/admin/users/{id}/ban, /unban,
+              DELETE /api/admin/users/{id}
+
+F21 — Validation enseignants
+  UsersManagement : badge "À valider" + bouton "Valider"
+  Endpoint : PUT /api/admin/enseignants/{id}/validate
+
+F22 — Modération contenu
+  SignalementsManagement (résoudre, rejeter, supprimer,
+  suppression du post lié)
+  PostsManagement (suppression directe)
+  Bouton "🚩 Signaler" côté Dashboard utilisateur
+  Endpoints : GET/PUT/DELETE /api/admin/signalements*,
+              POST /api/signalements,
+              DELETE /api/admin/posts/{id}
+
+F23 — Catalogues
+  CatalogueManagement (CRUD complet)
+  Endpoints : /api/admin/etablissements*, /api/admin/domaines*
+
+F24 — Statistiques
+  AdminDashboard avec DashboardStatsDTO étendu :
+    totalUsers, totalPosts, totalTeachers, pendingTeachers,
+    pendingSignalements, newUsersLast7Days, postsLast7Days,
+    usersByRole, usersTimeSeries, postsTimeSeries
+  Endpoint : GET /api/admin/stats
+
+
+================================================================================
+5. NOUVELLES ROUTES (URLS CÔTÉ FRONT)
+================================================================================
+
+/admin                 — Tableau de bord
+/admin/users           — Gestion des utilisateurs
+/admin/posts           — Gestion des posts
+/admin/signalements    — Modération des signalements
+/admin/catalogues      — Gestion des catalogues (établissements + domaines)
+
+
+================================================================================
+6. DÉPENDANCES
+================================================================================
+
+Aucune nouvelle dépendance npm ajoutée. Utilisation exclusive de
+react, react-dom, react-router-dom et axios (déjà présents dans
+package.json).
+
+================================================================================
+FIN DU DOCUMENT
+================================================================================

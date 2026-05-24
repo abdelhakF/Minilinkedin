@@ -1,0 +1,270 @@
+:root {
+  /* Couleurs LinkedIn officielles */
+  --li-brand-color: #0A66C2;        /* Bleu iconique */
+  --li-brand-hover: #004182;        /* Bleu foncé pour hover */
+  --li-bg-color: #F3F2EF;           /* Fond de page (gris clair LinkedIn) */
+  --li-card-bg: #FFFFFF;            /* Fond des cartes / posts */
+  --li-text-main: rgba(0, 0, 0, 0.9);   /* Texte principal */
+  --li-text-sub: rgba(0, 0, 0, 0.6);    /* Texte secondaire */
+  --li-border: #E0DFDC;             /* Couleur des bordures */
+  --li-error-bg: #FEF2F0;           /* Fond message erreur */
+  --li-error-text: #B92C1C;         /* Texte erreur */
+  --li-success-bg: #E9F6EC;         /* Fond message succès */
+  --li-success-text: #057A42;       /* Texte succès */
+  --li-info-bg: #E8F0FA;            /* Fond message info */
+  --li-info-text: #0A66C2;          /* Texte info */
+  --li-button-disabled: #6C8DB0;    /* Bouton désactivé */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  background-color: var(--li-bg-color);
+  color: var(--li-text-main);
+  line-height: 1.5;
+}
+
+.app {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 24px;
+  background-color: var(--li-bg-color);
+}
+
+/* Conteneurs d'authentification (Login, Register, etc.) */
+.auth-container {
+  width: 100%;
+  max-width: 460px;
+  margin: 0 auto;
+}
+
+.auth-form {
+  background-color: var(--li-card-bg);
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 28px 32px;
+  transition: box-shadow 0.2s ease;
+}
+
+.auth-form h2 {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--li-text-main);
+  margin-bottom: 24px;
+  text-align: center;
+  letter-spacing: -0.3px;
+}
+
+.auth-form p {
+  color: var(--li-text-sub);
+  margin-bottom: 20px;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Groupes de formulaires */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: var(--li-text-main);
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 16px;
+  border: 1px solid var(--li-border);
+  border-radius: 8px;
+  background-color: white;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--li-brand-color);
+  box-shadow: 0 0 0 2px rgba(10, 102, 194, 0.15);
+}
+
+/* Boutons */
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--li-brand-color);
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  border: none;
+  border-radius: 24px;      /* Boutons arrondis style LinkedIn */
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.05s;
+}
+
+button:hover:not(:disabled) {
+  background-color: var(--li-brand-hover);
+}
+
+button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+button:disabled {
+  background-color: var(--li-button-disabled);
+  cursor: not-allowed;
+}
+
+/* Messages d'état */
+.error-message {
+  background-color: var(--li-error-bg);
+  color: var(--li-error-text);
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  border-left: 4px solid var(--li-error-text);
+}
+
+.success-message {
+  background-color: var(--li-success-bg);
+  color: var(--li-success-text);
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  border-left: 4px solid var(--li-success-text);
+}
+
+.info-message {
+  background-color: var(--li-info-bg);
+  color: var(--li-info-text);
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  border-left: 4px solid var(--li-info-text);
+  word-break: break-word;
+}
+
+/* Liens sous les formulaires */
+.auth-links {
+  margin-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.auth-links a {
+  color: var(--li-brand-color);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.auth-links a:hover {
+  text-decoration: underline;
+}
+
+/* Dashboard (page après connexion) */
+.dashboard-container {
+  background-color: var(--li-card-bg);
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 28px;
+  border-bottom: 1px solid var(--li-border);
+  background-color: var(--li-card-bg);
+}
+
+.dashboard-header h1 {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--li-text-main);
+  letter-spacing: -0.2px;
+}
+
+.logout-btn {
+  width: auto;
+  padding: 8px 20px;
+  background-color: transparent;
+  color: var(--li-brand-color);
+  border: 1px solid var(--li-brand-color);
+  border-radius: 24px;
+  font-weight: 600;
+}
+
+.logout-btn:hover {
+  background-color: rgba(10, 102, 194, 0.08);
+  transform: none;
+}
+
+.dashboard-content {
+  padding: 32px 28px;
+}
+
+.dashboard-content p {
+  margin-bottom: 16px;
+  font-size: 16px;
+}
+
+.dashboard-content code {
+  background-color: #F3F2EF;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-family: 'SF Mono', 'Courier New', monospace;
+  font-size: 13px;
+  color: #1e1e1e;
+  word-break: break-all;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .auth-form {
+    padding: 24px 20px;
+  }
+  .dashboard-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+    text-align: center;
+  }
+  .logout-btn {
+    align-self: center;
+  }
+}
+
+.profile-link {
+  background-color: var(--li-brand-color);
+  color: white;
+  padding: 8px 20px;
+  border-radius: 24px;
+  text-decoration: none;
+  margin-right: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.profile-link:hover {
+  background-color: var(--li-brand-hover);
+}
